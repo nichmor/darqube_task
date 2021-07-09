@@ -1,0 +1,27 @@
+version: '3'
+
+volumes:
+    mongo_data:
+
+services:
+  app:
+    build: .
+    restart: on-failure
+    ports:
+      - "8000:8000"
+    environment:
+      MONGO_URI: "mongodb://mongo_db:27017"
+    env_file:
+      - .env
+    depends_on:
+      - mongo_db
+
+  mongo_db:
+    image: mongo:4.2.2
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27019:27017"
+    env_file:
+      - .env
